@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx.dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./wordpress:/var/www/html:delegated
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: kyureeus
+      MYSQL_USER: kyureeus_sql_db
+      MYSQL_PASSWORD: Word@2024Sql
+      MYSQL_ROOT_PASSWORD: Word@2024Sql
+  php:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    volumes:
+      - ./wordpress:/var/www/html:delegated
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8282:80
+    environment:
+      - PMA_ARBITRARY=1
+      - UPLOAD_LIMIT=102400K
